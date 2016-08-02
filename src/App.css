@@ -1,0 +1,35 @@
+:root {
+  --margin-size: 8px;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.App {
+  height: 100%;
+  white-space: nowrap;
+  /* width: 150%; */
+  /* overflow: hidden; */
+}
+
+.panel {
+  transition: all 1s;
+  border: 1px solid black;
+  height: calc(100% - 2 * var(--margin-size));
+  /* width: calc(33.3% - var(--margin-size) * 2); */
+  width: 800px;
+  display: inline-block;
+  margin: var(--margin-size);
+  position: relative;
+  left: 0;
+  vertical-align: top;
+}
+
+.left, .right {
+  width: calc(41.667vw - var(--margin-size) * 2);
+}
+.middle {
+  width: calc(58.333vw - var(--margin-size) * 2);
+}

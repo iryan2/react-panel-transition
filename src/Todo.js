@@ -27,7 +27,7 @@ const TodoList = React.createClass({
     return (
       <div>
         <button onClick={this.handleAdd}>Add Item</button>
-        <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={3000}>
+        <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={5000} transitionLeaveTimeout={3000}>
           {items}
         </ReactCSSTransitionGroup>
       </div>

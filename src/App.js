@@ -3,6 +3,34 @@ import { Motion, spring } from 'react-motion';
 import './App.css';
 import TodoList from './Todo';
 
+const LeftPanel = props => (
+  <div className="panel left" style={props.style}>
+    <h4>Left</h4>
+  </div>
+);
+
+const MiddlePanel = props => (
+  <div className="panel middle" style={props.style}>
+    <h4>Middle</h4>
+    <button onClick={() => props.onClick('left')}>
+      Toggle left panel
+    </button>
+    <button onClick={() => props.onClick('right')}>
+      Toggle right panel
+    </button>
+  </div>
+);
+
+const RightPanel = props => (
+  <div className="panel right" style={props.style}>
+    <h4>Right</h4>
+    <button onClick={() => props.onClick('right')}>
+      Close right panel
+    </button>
+  </div>
+);
+
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -30,44 +58,16 @@ class App extends Component {
     return (
       <div className="App">
 
-        <Motion style={{x: spring(this.state.left ? 400 : 0)}}>
+        <Motion style={{x: spring(this.state.left ? 0 : -400)}}>
           {({x}) =>
             <div>
-
-            {left &&
-              <div className="panel left" style={{ left: x }}>
-                <h4>Left</h4>
-                <p>{x}</p>
-                <br /><br /><br /><br />
-                <div><TodoList /></div>
-              </div>
-            }
-
-            {middle &&
-              <div className="panel middle" style={{ left: x }}>
-                <h4>Middle</h4>
-                <button onClick={() => this.handleClick('left')}>
-                  Toggle left panel
-                </button>
-                <button onClick={() => this.handleClick('right')}>
-                  Toggle right panel
-                </button>
-              </div>
-            }
-
-            {right &&
-              <div className="panel right" style={{ left: x }}>
-                <h4>Right</h4>
-                <button onClick={() => this.handleClick('right')}>
-                  Close right panel
-                </button>
-              </div>
-            }
-
-          </div>
+              {left && <LeftPanel style={{ left: x }} onClick={this.handleClick} />}
+              {middle && <MiddlePanel style={{ left: x }} onClick={this.handleClick} />}
+              {right && <RightPanel style={{ left: x }} onClick={this.handleClick} />}
+            </div>
           }
 
-          </Motion>
+        </Motion>
 
       </div>
     );

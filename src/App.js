@@ -3,13 +3,13 @@ import { TransitionMotion, spring } from 'react-motion';
 import './App.css';
 
 const LeftPanel = props => (
-  <div key="left" className="panel left" style={props.style}>
+  <div className="panel left" style={props.style}>
     <h4>Left</h4>
   </div>
 );
 
 const MiddlePanel = props => (
-  <div key="middle" className="panel middle" style={props.style}>
+  <div className="panel middle" style={props.style}>
     <h4>Middle</h4>
     <button onClick={() => props.onClick('left')}>
       Toggle left panel
@@ -21,7 +21,7 @@ const MiddlePanel = props => (
 );
 
 const RightPanel = props => (
-  <div key="right" className="panel right" style={props.style}>
+  <div className="panel right" style={props.style}>
     <h4>Right</h4>
     <button onClick={() => props.onClick('right')}>
       Close right panel
@@ -36,8 +36,17 @@ class App extends Component {
 
     // set the initial state
     this.state = {
-      panels: [{ key: 'left', }, { key: 'middle', }, { key: 'right', }],
-      offset: -400,
+      panels: [{
+        key: 'left',
+        component: LeftPanel,
+      }, {
+        key: 'middle',
+        component: MiddlePanel,
+      }, {
+        key: 'right',
+        component: RightPanel,
+      }],
+      offset: 0,
       left: true,
       middle: true,
       right: true,
@@ -50,16 +59,21 @@ class App extends Component {
   handleClick(key) {
     this.setState({
       [key]: !this.state[key],
-      panels: [{ key: 'middle', }, { key: 'right', }],
+      panels: [{
+        key: 'middle',
+        component: MiddlePanel,
+      }, {
+        key: 'right',
+        component: RightPanel,
+      }],
     });
   }
 
   willLeave() {
-    return { left: spring(0) };
+    return { left: spring(-400) };
   }
 
   render() {
-    const { left, middle, right } = this.state;
     console.log('this.state', this.state);
 
     return (
@@ -67,17 +81,24 @@ class App extends Component {
 
         <TransitionMotion
           willLeave={this.willLeave}
-          styles={this.state.panels.map(panel => ({
-            key: panel.key,
-            style: { left: this.state.offset },
-          }))}
-        >
+          styles={this.state.panels.map(({ key, component }) => {
+            return ({
+              key,
+              data: { component },
+              style: { left: this.state.offset },
+            })
+          })}>
+
           {interpolatedStyles =>
             <div>
-              {interpolatedStyles.map(config => {
-                if (config.key === 'left') return <LeftPanel style={{ left: config.style.left }} onClick={this.handleClick} />;
-                else if (config.key === 'middle') return <MiddlePanel style={{ left: config.style.left }} onClick={this.handleClick} />;
-                else if (config.key === 'right') return <RightPanel style={{ left: config.style.left }} onClick={this.handleClick} />;
+              {interpolatedStyles.map((config, i, arr) => {
+                return (
+                  <config.data.component
+                    key={config.key}
+                    style={{ left: arr[0].style.left }}
+                    onClick={this.handleClick}
+                  />
+                  );
               })}
             </div>
           }

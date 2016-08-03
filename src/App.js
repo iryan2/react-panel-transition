@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { Motion, spring } from 'react-motion';
+import { TransitionMotion, spring } from 'react-motion';
 import './App.css';
-import TodoList from './Todo';
 
 const LeftPanel = props => (
-  <div className="panel left" style={props.style}>
+  <div key="left" className="panel left" style={props.style}>
     <h4>Left</h4>
   </div>
 );
 
 const MiddlePanel = props => (
-  <div className="panel middle" style={props.style}>
+  <div key="middle" className="panel middle" style={props.style}>
     <h4>Middle</h4>
     <button onClick={() => props.onClick('left')}>
       Toggle left panel
@@ -22,7 +21,7 @@ const MiddlePanel = props => (
 );
 
 const RightPanel = props => (
-  <div className="panel right" style={props.style}>
+  <div key="right" className="panel right" style={props.style}>
     <h4>Right</h4>
     <button onClick={() => props.onClick('right')}>
       Close right panel
@@ -37,18 +36,26 @@ class App extends Component {
 
     // set the initial state
     this.state = {
+      panels: [{ key: 'left', }, { key: 'middle', }, { key: 'right', }],
+      offset: -400,
       left: true,
       middle: true,
       right: true,
     };
+
 
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick(key) {
     this.setState({
-      [key]: !this.state[key]
+      [key]: !this.state[key],
+      panels: [{ key: 'middle', }, { key: 'right', }],
     });
+  }
+
+  willLeave() {
+    return { left: spring(0) };
   }
 
   render() {
@@ -58,16 +65,24 @@ class App extends Component {
     return (
       <div className="App">
 
-        <Motion style={{x: spring(this.state.left ? 0 : -400)}}>
-          {({x}) =>
+        <TransitionMotion
+          willLeave={this.willLeave}
+          styles={this.state.panels.map(panel => ({
+            key: panel.key,
+            style: { left: this.state.offset },
+          }))}
+        >
+          {interpolatedStyles =>
             <div>
-              {left && <LeftPanel style={{ left: x }} onClick={this.handleClick} />}
-              {middle && <MiddlePanel style={{ left: x }} onClick={this.handleClick} />}
-              {right && <RightPanel style={{ left: x }} onClick={this.handleClick} />}
+              {interpolatedStyles.map(config => {
+                if (config.key === 'left') return <LeftPanel style={{ left: config.style.left }} onClick={this.handleClick} />;
+                else if (config.key === 'middle') return <MiddlePanel style={{ left: config.style.left }} onClick={this.handleClick} />;
+                else if (config.key === 'right') return <RightPanel style={{ left: config.style.left }} onClick={this.handleClick} />;
+              })}
             </div>
           }
 
-        </Motion>
+        </TransitionMotion>
 
       </div>
     );

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { Motion, spring } from 'react-motion';
 import './App.css';
 import TodoList from './Todo';
 
@@ -30,21 +30,21 @@ class App extends Component {
     return (
       <div className="App">
 
-        <ReactCSSTransitionGroup transitionName="paneltrans" transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
-          {left &&
-            <div className="panel left">
-              <h4>Left</h4>
-              {/*
-                <button>Only open this panel</button>
-                <button>Open details panel</button>
-                */}
+        <Motion style={{x: spring(this.state.left ? 400 : 0)}}>
+          {({x}) =>
+            <div>
+
+            {left &&
+              <div className="panel left" style={{ left: x }}>
+                <h4>Left</h4>
+                <p>{x}</p>
                 <br /><br /><br /><br />
                 <div><TodoList /></div>
               </div>
             }
 
             {middle &&
-              <div className="panel middle">
+              <div className="panel middle" style={{ left: x }}>
                 <h4>Middle</h4>
                 <button onClick={() => this.handleClick('left')}>
                   Toggle left panel
@@ -56,7 +56,7 @@ class App extends Component {
             }
 
             {right &&
-              <div className="panel right">
+              <div className="panel right" style={{ left: x }}>
                 <h4>Right</h4>
                 <button onClick={() => this.handleClick('right')}>
                   Close right panel
@@ -64,7 +64,10 @@ class App extends Component {
               </div>
             }
 
-        </ReactCSSTransitionGroup>
+          </div>
+          }
+
+          </Motion>
 
       </div>
     );

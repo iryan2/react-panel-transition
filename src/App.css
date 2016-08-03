@@ -16,6 +16,9 @@
   white-space: nowrap;
   /* overflow: hidden; */
 }
+.App > div {
+  height: 100%;
+}
 
 .panel {
   /* transition: left 1s; */
@@ -27,7 +30,6 @@
   left: 0;
   vertical-align: top;
 }
-
 .left {
   width: var(--left-width);
 }
@@ -38,46 +40,3 @@
   width: var(--right-width);
 }
 
-.left.paneltrans-leave {
-  transition: left 1s;
-  left: 0;
-}
-.left.paneltrans-leave-active,
-.left.paneltrans-leave + .middle,
-.left.paneltrans-leave ~ .right {
-  transition: left 1s;
-  left: var(--negative-left-width);
-}
-
-.left.paneltrans-enter {
-  transition: left 1s;
-  left: var(--negative-left-width);
-}
-.left.paneltrans-enter-active,
-.left.paneltrans-enter + .middle,
-.left.paneltrans-enter ~ .right {
-  transition: left 1s;
-  left: 0;
-}
-
-
-
-
-
-.example-enter {
-  opacity: 0.01;
-}
-
-.example-enter.example-enter-active {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
-}
-
-.example-leave {
-  opacity: 1;
-}
-
-.example-leave.example-leave-active {
-  opacity: 0.01;
-  transition: opacity 3000ms ease-in;
-}

@@ -103,11 +103,11 @@ class App extends Component {
   }
 
   willLeave() {
-    return { left: spring(-400) };
+    return { left: spring(-41.666) };
   }
 
   willEnter(styleThatEntered) {
-    return { left: -400 };
+    return { left: -41.666 };
   }
 
   render() {
@@ -133,7 +133,7 @@ class App extends Component {
                 return (
                   <config.data.component
                     key={config.key}
-                    style={{ left: arr[0].style.left }}
+                    style={{ left: `${arr[0].style.left}%` }}
                     onClick={this.handleClick}
                   />
                   );

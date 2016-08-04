@@ -3,7 +3,9 @@ import { TransitionMotion, spring } from 'react-motion';
 import _ from 'lodash';
 import './App.css';
 
-const LeftPanel = props => (
+const LeftPanel = props => {
+  console.log('props.style', props.style);
+  return (
   <div className="panel left" style={props.style}>
     <h4>Left</h4>
     <button onClick={() => props.onClick('left')}>
@@ -17,6 +19,7 @@ const LeftPanel = props => (
     </button>
   </div>
 );
+}
 
 const MiddlePanel = props => (
   <div className="panel middle" style={props.style}>
@@ -51,12 +54,18 @@ const RightPanel = props => (
 const panelConfig = [{
   key: 'left',
   component: LeftPanel,
+  widthPercent: 41.667,
+  marginSize: 8,
 }, {
   key: 'middle',
   component: MiddlePanel,
+  widthPercent: 58.333,
+  marginSize: 8,
 }, {
   key: 'right',
   component: RightPanel,
+  widthPercent: 41.667,
+  marginSize: 8,
 }];
 
 class App extends Component {
@@ -103,47 +112,47 @@ class App extends Component {
   }
 
   willLeave() {
-    return { left: spring(-41.666) };
+    return { left: spring(-41.667) };
   }
 
   willEnter(styleThatEntered) {
-    return { left: -41.666 };
+    return { left: -41.667 };
   }
 
   render() {
     console.log('this.state', this.state);
 
     return (
-      <div className="App">
+      <TransitionMotion
+        willLeave={this.willLeave}
+        willEnter={this.willEnter}
+        styles={this.state.panels.map(({ key, ...rest }) => {
+          return ({
+            key,
+            data: { ...rest },
+            style: { left: spring(this.state.offset) },
+          })
+        })}>
 
-        <TransitionMotion
-          willLeave={this.willLeave}
-          willEnter={this.willEnter}
-          styles={this.state.panels.map(({ key, component }) => {
-            return ({
-              key,
-              data: { component },
-              style: { left: spring(this.state.offset) },
-            })
-          })}>
+        {interpolatedStyles =>
+          <div>
+            {interpolatedStyles.map(({ key, data }, i, arr) => {
+              return (
+                <data.component
+                  key={key}
+                  style={{
+                    left: `${arr[0].style.left}%`,
+                    width: `calc(${data.widthPercent}% - ${2 * data.marginSize}px)`,
+                    margin: `${data.marginSize}px`,
+                  }}
+                  onClick={this.handleClick}
+                />
+              );
+            })}
+          </div>
+        }
 
-          {interpolatedStyles =>
-            <div>
-              {interpolatedStyles.map((config, i, arr) => {
-                return (
-                  <config.data.component
-                    key={config.key}
-                    style={{ left: `${arr[0].style.left}%` }}
-                    onClick={this.handleClick}
-                  />
-                  );
-              })}
-            </div>
-          }
-
-        </TransitionMotion>
-
-      </div>
+      </TransitionMotion>
     );
   }
 }

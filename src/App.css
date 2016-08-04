@@ -1,23 +1,19 @@
 :root {
   --margin-size: 8px;
-  --left-width: calc(41.667vw - var(--margin-size) * 2);
-  --middle-width: calc(58.333vw - var(--margin-size) * 2);
-  --right-width: calc(41.667vw - var(--margin-size) * 2);
-  --negative-left-width: calc(-1 * var(--left-width) - 2 * var(--margin-size));
 }
 
 #root {
   height: 100%;
   width: 100%;
 }
+#root > div {
+  height: 100%;
+  white-space: nowrap;
+}
 
 .App {
   height: 100%;
-  white-space: nowrap;
   /* overflow: hidden; */
-}
-.App > div {
-  height: 100%;
 }
 
 .panel {
@@ -25,17 +21,7 @@
   border: 1px solid black;
   height: calc(100% - 2 * var(--margin-size));
   display: inline-block;
-  margin: var(--margin-size);
   position: relative;
   left: 0;
   vertical-align: top;
-}
-.left {
-  width: var(--left-width);
-}
-.middle {
-  width: var(--middle-width);
-}
-.right {
-  width: var(--right-width);
 }

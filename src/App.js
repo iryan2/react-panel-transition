@@ -101,24 +101,28 @@ class App extends Component {
       <TransitionMotion
         willLeave={this.willLeave}
         willEnter={this.willEnter}
-        styles={this.state.panels.map(({ key, ...rest }) => {
-          return ({
-            key,
-            data: { ...rest },
-            style: { left: spring(this.state.offset, springConfig) },
-          })
-        })}>
+        styles={this.state.panels.map(({ key, ...rest }) => ({
+          key,
+          data: { ...rest },
+          style: { left: spring(this.state.offset, springConfig) },
+        }))}>
 
         {interpolatedStyles =>
           <div>
-            {interpolatedStyles.map(({ key, data }, i, arr) => {
+            {interpolatedStyles.map(({ key, data }, i, allPanels) => {
+              const leftPanel = allPanels[0];
               let width = data.widthPercent;
               if (key === 'left' && this.state.leftFullWidth) width = 100;
+              /*
+               * All panels are `position: relative`, so here we set their left
+               * property to the value of the panel being transitioned - which
+               * results in them staying in sync
+               */
               return (
                 <data.component
                   key={key}
                   style={{
-                    left: `${arr[0].style.left}%`,
+                    left: `${leftPanel.style.left}%`,
                     width: `calc(${width}% - ${2 * data.marginSize}px)`,
                     margin: `${data.marginSize}px`,
                   }}

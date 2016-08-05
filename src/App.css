@@ -17,7 +17,7 @@
 }
 
 .panel {
-  /* transition: left 1s; */
+  transition: width 0.5s;
   border: 1px solid black;
   height: calc(100% - 2 * var(--margin-size));
   display: inline-block;

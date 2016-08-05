@@ -6,9 +6,6 @@ import './App.css';
 const LeftPanel = props => (
   <div className="panel left" style={props.style}>
     <h4>Left</h4>
-    <button onClick={() => props.onClick(['left'])}>
-      Toggle left
-    </button>
     <button onClick={() => props.onClick(['middle'])}>
       Toggle middle
     </button>
@@ -18,11 +15,8 @@ const LeftPanel = props => (
 const MiddlePanel = props => (
   <div className="panel middle" style={props.style}>
     <h4>Middle</h4>
-    <button onClick={() => props.onClick(['left'])}>
-      Toggle left
-    </button>
     <button onClick={() => props.onClick(['left', 'right'])}>
-      Toggle left && right
+      Toggle left & right
     </button>
   </div>
 );
@@ -30,8 +24,8 @@ const MiddlePanel = props => (
 const RightPanel = props => (
   <div className="panel right" style={props.style}>
     <h4>Right</h4>
-    <button onClick={() => props.onClick(['right'])}>
-      Close right panel
+    <button onClick={() => props.onClick(['left', 'right'])}>
+      Close right, open left
     </button>
   </div>
 );
@@ -59,8 +53,9 @@ class App extends Component {
 
     // set the initial state
     this.state = {
-      panels: [panelConfig[0], panelConfig[1]],
+      panels: [panelConfig[0]] ,
       offset: 0,
+      leftFullWidth: true,
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -84,6 +79,7 @@ class App extends Component {
 
     this.setState({
       panels: newPanels,
+      leftFullWidth: newPanels.length === 1 ? true : false,
     });
   }
 
@@ -96,8 +92,6 @@ class App extends Component {
   }
 
   render() {
-    console.log('this.state', this.state);
-
     return (
       <TransitionMotion
         willLeave={this.willLeave}
@@ -113,12 +107,14 @@ class App extends Component {
         {interpolatedStyles =>
           <div>
             {interpolatedStyles.map(({ key, data }, i, arr) => {
+              let width = data.widthPercent;
+              if (key === 'left' && this.state.leftFullWidth) width = 100;
               return (
                 <data.component
                   key={key}
                   style={{
                     left: `${arr[0].style.left}%`,
-                    width: `calc(${data.widthPercent}% - ${2 * data.marginSize}px)`,
+                    width: `calc(${width}% - ${2 * data.marginSize}px)`,
                     margin: `${data.marginSize}px`,
                   }}
                   onClick={this.handleClick}

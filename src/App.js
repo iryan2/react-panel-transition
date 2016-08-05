@@ -87,14 +87,12 @@ class App extends Component {
     });
   }
 
-  willLeave(styleThatLeft) {
-    // console.log('styleThatLeft', styleThatLeft);
-    return { left: spring(-41.667) };
+  willLeave({ data: { widthPercent } }) {
+    return { left: spring(widthPercent * -1) };
   }
 
-  willEnter(styleThatEntered) {
-    // console.log('styleThatEntered', styleThatEntered);
-    return { left: -41.667 };
+  willEnter({ data: { widthPercent } }) {
+    return { left: widthPercent * -1 };
   }
 
   render() {

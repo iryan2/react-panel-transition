@@ -11,17 +11,19 @@
   white-space: nowrap;
 }
 
-.App {
-  height: 100%;
-  /* overflow: hidden; */
-}
-
 .panel {
-  transition: width 0.5s;
+  transition: width 0.525s cubic-bezier(0.22, 0.61, 0.36, 1);
   border: 1px solid black;
   height: calc(100% - 2 * var(--margin-size));
   display: inline-block;
   position: relative;
   left: 0;
   vertical-align: top;
+}
+
+.panel.left {
+  height: 500%
+}
+.panel.right {
+  height: 50%
 }

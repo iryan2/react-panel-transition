@@ -30,6 +30,11 @@ const RightPanel = props => (
   </div>
 );
 
+const springConfig = {
+  stiffness: 210,
+  damping: 26,
+};
+
 const panelConfig = [{
   key: 'left',
   component: LeftPanel,
@@ -84,7 +89,7 @@ class App extends Component {
   }
 
   willLeave({ data: { widthPercent } }) {
-    return { left: spring(widthPercent * -1) };
+    return { left: spring(widthPercent * -1, springConfig) };
   }
 
   willEnter({ data: { widthPercent } }) {
@@ -100,7 +105,7 @@ class App extends Component {
           return ({
             key,
             data: { ...rest },
-            style: { left: spring(this.state.offset) },
+            style: { left: spring(this.state.offset, springConfig) },
           })
         })}>
 

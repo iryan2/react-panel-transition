@@ -58,7 +58,7 @@ class App extends Component {
 
     // set the initial state
     this.state = {
-      panels: [panelConfig[0]] ,
+      panels: [panelConfig[0]],
       offset: 0,
       leftFullWidth: true,
     };
@@ -84,7 +84,7 @@ class App extends Component {
 
     this.setState({
       panels: newPanels,
-      leftFullWidth: newPanels.length === 1 ? true : false,
+      leftFullWidth: newPanels.length === 1,
     });
   }
 
